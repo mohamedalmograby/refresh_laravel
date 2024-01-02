@@ -21,7 +21,20 @@ class ProductFactory extends Factory
             'description' => $this->faker->sentence,
             'price' => $this->faker->randomFloat(2, 10, 100),
             'quantity' => $this->faker->numberBetween(1, 100),
-            'image_url' => $this->faker->imageUrl(),
+            'image_url' => $this->getRandomLoremPicsumUrl(),
         ];
+    }
+
+    /**
+     * Get a random Lorem Picsum image URL.
+     *
+     * @return string
+     */
+    protected function getRandomLoremPicsumUrl(): string
+    {
+        $width = 640;
+        $height = 480;
+
+        return "https://picsum.photos/id/{$this->faker->numberBetween(1, 500)}/{$width}/{$height}";
     }
 }
