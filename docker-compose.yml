@@ -29,6 +29,9 @@ services:
         container_name: php
         volumes:
             - ./src:/var/www/html
+        depends_on:
+            - mysql
+            - npm
         networks:
             - laravel
 
@@ -59,24 +62,33 @@ services:
         command: tail -f /dev/null
 
 
-    artisan:
-        build:
-            context: .
-            dockerfile: php.dockerfile
-        container_name: artisan
-        volumes:
-            - ./src:/var/www/html
-        working_dir: /var/www/html
-        entrypoint: ['php', 'artisan']
-        networks:
-            - laravel
-
     npm:
         image: node:current-alpine
         container_name: npm
+        ports:
+            - 5173:5173
         volumes:
             - ./src:/var/www/html
         working_dir: /var/www/html
-        entrypoint: ['npm']
+        command: npm run dev --host
+        networks:
+            - laravel
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+        container_name: elasticsearch
+        environment:
+            - discovery.type=single-node
+        ports:
+            - 9200:9200
+            - 9300:9300
+        networks:
+            - laravel
+    kibana:
+        image: docker.elastic.co/kibana/kibana:7.10.0
+        container_name: kibana
+        ports:
+            - 5601:5601
+        environment:
+            ELASTICSEARCH_HOSTS: http://elasticsearch:9200
         networks:
             - laravel

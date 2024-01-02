@@ -15,7 +15,7 @@ class AdminController extends Controller
 
     public function orders()
     {
-        $orders = Order::with('orderItems.product')->get();
+        $orders = Order::with('orderItems.product')->paginate(10);
         return view('admin.orders', compact('orders'));
     }
 

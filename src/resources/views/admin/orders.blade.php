@@ -30,6 +30,7 @@
                 @endforeach
             </tbody>
         </table>
+        {{ $orders->links() }}
 
         @foreach($orders as $order)
             <div class="modal fade" id="orderModal{{ $order->id }}" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel{{ $order->id }}" aria-hidden="true">
