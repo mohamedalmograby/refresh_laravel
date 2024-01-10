@@ -61,7 +61,6 @@ services:
             - laravel
         command: tail -f /dev/null
 
-
     npm:
         image: node:current-alpine
         container_name: npm
@@ -74,21 +73,23 @@ services:
         networks:
             - laravel
     elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+        image: elasticsearch:8.11.3
         container_name: elasticsearch
         environment:
             - discovery.type=single-node
+            - xpack.security.enabled=false
         ports:
             - 9200:9200
             - 9300:9300
         networks:
             - laravel
     kibana:
-        image: docker.elastic.co/kibana/kibana:7.10.0
+        image: kibana:8.11.3
         container_name: kibana
         ports:
             - 5601:5601
         environment:
-            ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+            - elasticsearch.hosts=["http://elasticsearch:9200"]
+            - xpack.security.enabled=false
         networks:
             - laravel

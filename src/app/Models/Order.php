@@ -16,7 +16,7 @@ class Order extends Model
         'total_amount',
         'payment_status',
     ];
-
+    #[Override]
     public function user()
     {
         return $this->belongsTo(User::class);

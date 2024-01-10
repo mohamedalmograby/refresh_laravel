@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
     use HasFactory;
+    use Searchable;
     protected $fillable = [
         'name',
         'description',
@@ -15,6 +17,15 @@ class Product extends Model
         'quantity',
         'image_url',
     ];
+
+    public function toElasticsearchDocumentArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'description' => $this->description,
+            'price' => $this->price,
+        ];
+    }
 
     public function categories()
     {
